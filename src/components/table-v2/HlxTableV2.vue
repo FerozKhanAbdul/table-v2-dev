@@ -1,99 +1,152 @@
 <template>
-    <table class="bordered">
-        <colgroup
-        style="width:100% !important"
-        >
-        <col v-for="heads in this.theads" :key="heads"/>
-        </colgroup>
-        <thead>
-              <tr>
-                <slot name="mergehead"></slot>
-            </tr>
-            <tr>
-                <slot name="thead"></slot>
-            </tr>
-        </thead>
-        <tbody>
-            <slot name="tbody"></slot>
-        </tbody>
-    </table>
+  <table
+    :class="{
+      hlxTableV2: true,
+      headerBorder: this.border.includes('header') ? true : false,
+      tableBorder: this.border.includes('table') ? true : false,
+      horizontalBorder: this.border.includes('horizontal') ? true : false,
+      verticalBorder: this.border.includes('vertical') ? true : false,
+      lightTheme: this.theme === 'light' ? true : false,
+      primaryTheme: this.theme === 'primary' ? true : false,
+      boldHeaders: this.boldHeaders,
+      rowHover: this.rowHover,
+      stripedRow: this.stripedRows,
+    }"
+    :id="'table-v2-' + this.unique"
+  >
+    <colgroup style="width: 100% !important">
+      <col v-for="heads in this.theads" :key="heads" />
+    </colgroup>
+    <thead>
+      <tr>
+        <slot name="mergehead"></slot>
+      </tr>
+      <tr>
+        <slot name="thead"></slot>
+      </tr>
+    </thead>
+    <tbody>
+      <slot name="tbody"></slot>
+    </tbody>
+  </table>
 </template>
 
 <script>
 export default {
-    props: {
-        theads: {
-            type: Array
-        }
+  props: {
+    theads: {
+      type: Array,
+    },
+    border: {
+      type: Array,
+      default: [],
+    },
+    boldHeaders: {
+      type: Boolean,
+      default: false,
+    },
+    rowHover: {
+      type: Boolean,
+      default: false,
+    },
+    theme: {
+        type: String,
+        default: 'light'
+    },
+    stripedRows: {
+        type: Boolean,
+        default: false
+    }
+  },
+  data() {
+    return {
+      unique: Math.floor(Math.random() * 1000 + 1),
+    };
+  },
+};
+</script>
+<style lang="scss">
+// ----------------------------------------- Basic table css -----------------------------------------
+.hlxTableV2 {
+  border-collapse: separate !important;
+  border-spacing: 0;
+  width: 100%;
+  font-family: "OpenSans";
+  background: white;
+  th,
+  td {
+    padding: 10px;
+    font-weight: 100;
+  }
+}
+
+// ----------------------------------------- Bold headers css -----------------------------------------
+.boldHeaders {
+  th {
+    font-weight: bold;
+  }
+}
+
+// ----------------------------------------- Borders css -----------------------------------------
+
+.tableBorder {
+  border: solid #ccc 1px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+}
+
+.headerBorder {
+  th {
+    border-bottom: 1px solid #d8d8d8;
+  }
+}
+
+.verticalBorder {
+  th,
+  td {
+    border-right: 1px solid #d8d8d8;
+  }
+  th:last-child,
+  td:last-child {
+    border-right: none;
+  }
+}
+
+.horizontalBorder {
+  td {
+    border-bottom: 1px solid #d8d8d8;
+  }
+  tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+// ----------------------------------------- Borders css -----------------------------------------
+.rowHover {
+    tr:hover {
+        background: #e4fff5;
     }
 }
-</script>
-<style scoped>
-table {
-    border-collapse: separate !important;
-    border-spacing: 0;
-    width: 100%;
-    font-family: 'OpenSans';
+
+// ----------------------------------------- Theme css -----------------------------------------
+.lightTheme {
+    th {
+        background: white;
+    }
 }
-.bordered {
-    border: solid #ccc 1px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-    border-radius: 6px;
-    -webkit-box-shadow: 0 1px 1px #ccc;
-    -moz-box-shadow: 0 1px 1px #ccc;
-    box-shadow: 0 1px 1px #ccc;
+.primaryTheme {
+    th {
+        background: #54bd95;
+        color: white;
+    }
 }
-/* .bordered tr:hover {
-    background: #ECECEC;    
-    -webkit-transition: all 0.1s ease-in-out;
-    -moz-transition: all 0.1s ease-in-out;
-    transition: all 0.1s ease-in-out;
-} */
-/* .bordered td, .bordered th {
-    border-left: 1px solid #ccc;
-    border-top: 1px solid #ccc;
-    padding: 10px;
-    text-align: left;
+
+// ----------------------------------------- striped row css -----------------------------------------
+
+.stripedRow {
+    tr:nth-child(even) {
+        background: #e4fff5;
+    }
 }
-.bordered th {
-    background-color: #ECECEC;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#F8F8F8), to(#ECECEC));
-    background-image: -webkit-linear-gradient(top, #F8F8F8, #ECECEC);
-    background-image: -moz-linear-gradient(top, #F8F8F8, #ECECEC);    
-    background-image: linear-gradient(top, #F8F8F8, #ECECEC);
-    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
-    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;
-    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
-    border-top: none;
-    text-shadow: 0 1px 0 rgba(255,255,255,.5);
-}
-.bordered td:first-child, .bordered th:first-child {
-    border-left: none;
-}
-.bordered th:first-child {
-    -moz-border-radius: 6px 0 0 0;
-    -webkit-border-radius: 6px 0 0 0;
-    border-radius: 6px 0 0 0;
-}
-.bordered th:last-child {
-    -moz-border-radius: 0 6px 0 0;
-    -webkit-border-radius: 0 6px 0 0;
-    border-radius: 0 6px 0 0;
-}
-.bordered th:only-child{
-    -moz-border-radius: 6px 6px 0 0;
-    -webkit-border-radius: 6px 6px 0 0;
-    border-radius: 6px 6px 0 0;
-}
-.bordered tr:last-child td:first-child {
-    -moz-border-radius: 0 0 0 6px;
-    -webkit-border-radius: 0 0 0 6px;
-    border-radius: 0 0 0 6px;
-}
-.bordered tr:last-child td:last-child {
-    -moz-border-radius: 0 0 6px 0;
-    -webkit-border-radius: 0 0 6px 0;
-    border-radius: 0 0 6px 0;
-}  */
 </style>
