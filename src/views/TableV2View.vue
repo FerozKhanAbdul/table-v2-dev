@@ -16,7 +16,7 @@
       <hlx-table-head v-for="(i, index) in this.headvalue" :key="index" >{{
         i.label
       }}</hlx-table-head>
-      <hlx-table-head >Slot 1</hlx-table-head>
+      <hlx-table-head :align="'right'">Slot 1</hlx-table-head>
       <hlx-table-head>Slot 2</hlx-table-head>
     </template>
     <template #tbody>
@@ -35,7 +35,7 @@
           </div>
         </hlx-table-cell>
         <hlx-table-cell><input type="text" /></hlx-table-cell>
-        <hlx-table-cell><button>Save</button></hlx-table-cell>
+        <hlx-table-cell :align="'right'"><button>Save</button></hlx-table-cell>
       </tr>
     </template>
   </hlx-table-v2>

@@ -1,5 +1,5 @@
 <template>
-<td>
+<td :style="{textAlign: this.align }">
     <slot></slot>
 </td>
 </template>
@@ -8,8 +8,9 @@
 export default {
    
    props:{
-    cellvalue:{
-        type:String
+    align:{
+        type:String,
+        default: 'center'
     }
    }
 }
